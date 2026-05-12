@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Novo Livro — Leitor de Itaquá{% endblock %}
+
+{% block content %}
+<div class="cadastro-livro-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card card-cadastro-livro shadow-lg">
+                    <div class="card-body p-5">
+
+                        <div class="text-center mb-4">
+                            <h1 class="h2 titulo-pagina">Registrar Novo Livro</h1>
+                            <p class="text-muted">Adicione os dados manualmente ao seu acervo 📖</p>
+                        </div>
+
+                        <form action="{{ url_for('salvar_livro') }}" method="POST" enctype="multipart/form-data">
+
+                            <div class="mb-3">
+                                <label class="form-label">Título do Livro</label>
+                                <input type="text" name="titulo" class="form-control form-control-lg form-control-itaqua"
+                                       placeholder="Ex: O Nome do Vento" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Número de Páginas (XP)</label>
+                                <input type="number" name="paginas" class="form-control form-control-lg form-control-itaqua"
+                                       placeholder="Ex: 350" required min="1">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Capa do Livro (Upload)</label>
+                                <input type="file" name="capa_imagem" class="form-control form-control-lg" accept="image/*">
+                                <small class="text-muted">Formatos: JPG, PNG. Se deixar vazio, usaremos um ícone padrão.</small>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-bosque btn-lg">
+                                    Salvar na Estante
+                                </button>
+                                <a href="{{ url_for('estante') }}" class="btn btn-outline-secondary">Cancelar</a>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

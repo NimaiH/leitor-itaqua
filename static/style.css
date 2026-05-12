@@ -1,0 +1,756 @@
+/*
+ * style.css — Folha de estilos principal do Leitor de Itaquá
+ *
+ * Organização:
+ *   1. Variáveis Globais (Design Tokens)
+ *   2. Reset e Estilos Base
+ *   3. Componentes Reutilizáveis (Botões, Badges, Cards)
+ *   4. Navbar
+ *   5. Páginas Específicas (Landing, Login, Cadastro, Estante, etc.)
+ *   6. Painel Administrativo
+ *   7. Animações
+ *
+ * Todos os estilos inline foram removidos dos templates HTML e
+ * migrados para classes semânticas aqui, seguindo a separação
+ * entre estrutura (HTML) e apresentação (CSS).
+ */
+
+/* ══════════════════════════════════════════════════════
+   1. VARIÁVEIS GLOBAIS — Design Tokens da identidade Itaquá
+   ══════════════════════════════════════════════════════ */
+:root {
+    --bordo-principal: #6b1a2a;
+    --bordo-escuro:    #4a0f1c;
+    --bordo-claro:     #8c2b3e;
+    --ambar:           #c9883a;
+    --ambar-claro:     #e8b96a;
+    --marfim:          #faf6ef;
+    --texto-escuro:    #1e1410;
+    --texto-medio:     #5a3d30;
+}
+
+/* ══════════════════════════════════════════════════════
+   2. RESET E ESTILOS BASE
+   ══════════════════════════════════════════════════════ */
+body {
+    background-color: var(--marfim);
+    color: var(--texto-escuro);
+    font-family: 'Source Sans 3', sans-serif;
+}
+
+h1, h2, h3, h4, h5, .navbar-brand {
+    font-family: 'Playfair Display', serif;
+}
+
+main {
+    min-height: 85vh;
+    background-color: var(--marfim);
+}
+
+/* Permite que dropdowns de tabelas não sejam cortados pelo overflow-x */
+.table-responsive {
+    overflow-x: auto;
+    overflow-y: visible !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   3. COMPONENTES REUTILIZÁVEIS
+   ══════════════════════════════════════════════════════ */
+
+/* ── Botões ─────────────────────────────────────────── */
+.btn-bosque,
+.btn-itaqua {
+    background-color: var(--bordo-principal);
+    color: #faf6ef !important;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.15s;
+}
+
+.btn-bosque:hover,
+.btn-itaqua:hover {
+    background-color: var(--bordo-claro);
+    color: #faf6ef !important;
+    transform: translateY(-1px);
+}
+
+.btn-biblioteca {
+    background-color: var(--ambar);
+    color: var(--bordo-escuro) !important;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Source Sans 3', sans-serif;
+    transition: background-color 0.2s, transform 0.15s;
+}
+
+.btn-biblioteca:hover {
+    background-color: var(--ambar-claro);
+    transform: translateY(-1px);
+}
+
+.btn-bordo {
+    background-color: var(--bordo-principal);
+    color: white;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-bordo:hover {
+    background-color: var(--bordo-escuro);
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-ambar {
+    background-color: var(--ambar);
+    color: white;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-ambar:hover {
+    background-color: var(--ambar-claro);
+    transform: translateY(-3px);
+    color: white;
+}
+
+/* ── Badges / Etiquetas ─────────────────────────────── */
+.badge-xp {
+    background-color: var(--ambar);
+    color: var(--bordo-escuro);
+    font-weight: bold;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+}
+
+.badge-nivel {
+    background-color: var(--ambar);
+    color: var(--bordo-escuro);
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 6px 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+}
+
+.badge-rank {
+    background: rgba(107, 26, 42, 0.08);
+    color: var(--bordo-principal);
+    border: 1px solid rgba(107, 26, 42, 0.2);
+    font-family: 'Source Sans 3', sans-serif;
+}
+
+.badge-proac {
+    display: inline-block;
+    background: rgba(201, 136, 58, 0.12);
+    border: 1px solid var(--ambar);
+    color: var(--texto-medio);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.85rem;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+/* ── Cards Genéricos ────────────────────────────────── */
+.card-itaqua {
+    border-radius: 14px;
+    border: 1px solid rgba(107, 26, 42, 0.1) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(5px);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+    height: 100%;
+    overflow: hidden;
+}
+
+.card-itaqua:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 28px rgba(107, 26, 42, 0.15) !important;
+}
+
+.card-itaqua img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* ── Imagens em miniaturas ──────────────────────────── */
+.capa-miniatura {
+    width: 60px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.capa-miniatura-admin {
+    width: 40px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Divisor decorativo ─────────────────────────────── */
+.divisor-logo {
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--bordo-principal), var(--ambar));
+    margin: 0 auto 20px;
+    border-radius: 2px;
+}
+
+/* ── Popover (Bootstrap override) ──────────────────── */
+.popover-body {
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--texto-escuro);
+    background-color: var(--marfim);
+}
+
+.popover-header {
+    background-color: var(--bordo-principal);
+    color: white;
+    font-family: 'Playfair Display', serif;
+}
+
+/* ── Formulários ────────────────────────────────────── */
+.form-control-itaqua {
+    border-radius: 10px;
+    border: 1px solid rgba(107, 26, 42, 0.2);
+    padding: 12px 16px;
+    font-family: 'Source Sans 3', sans-serif;
+}
+
+.form-control-itaqua:focus,
+.form-control:focus {
+    border-color: var(--bordo-principal);
+    box-shadow: 0 0 0 0.2rem rgba(107, 26, 42, 0.12);
+}
+
+.form-label {
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--texto-medio);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ══════════════════════════════════════════════════════
+   4. NAVBAR
+   ══════════════════════════════════════════════════════ */
+.navbar {
+    background-color: var(--bordo-escuro) !important;
+    z-index: 1030;
+    border-bottom: 3px solid var(--ambar);
+}
+
+.navbar-brand {
+    font-family: 'Playfair Display', serif !important;
+    color: var(--ambar-claro) !important;
+    font-size: 1.25rem;
+}
+
+.nav-link {
+    color: rgba(250, 246, 239, 0.85) !important;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 400;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--ambar-claro) !important;
+}
+
+.navbar-toggler {
+    border: none;
+    filter: invert(1);
+}
+
+.nav-link-admin {
+    color: #ffc107 !important;
+    background: rgba(255, 193, 7, 0.1);
+    border-radius: 5px;
+}
+
+.btn-logout {
+    color: var(--ambar-claro);
+    border-color: var(--ambar-claro);
+}
+
+/* ══════════════════════════════════════════════════════
+   5. PÁGINAS ESPECÍFICAS
+   ══════════════════════════════════════════════════════ */
+
+/* ── Landing Page (index.html) ──────────────────────── */
+.landing-wrapper {
+    overflow-x: hidden;
+}
+
+.hero-section {
+    height: 80vh;
+    background: linear-gradient(rgba(107, 26, 42, 0.8), rgba(74, 15, 28, 0.9)),
+                url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+/* ── Login ──────────────────────────────────────────── */
+.login-page-wrapper {
+    min-height: 90vh;
+    background: linear-gradient(rgba(107, 26, 42, 0.7), rgba(74, 15, 28, 0.85)),
+                url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+}
+
+/* ── Cadastro de Usuário ────────────────────────────── */
+.cadastro-wrapper {
+    background: linear-gradient(rgba(74, 15, 28, 0.12), rgba(74, 15, 28, 0.12)),
+                url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&q=80&w=1500');
+    background-size: cover;
+    background-position: center;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+.card-cadastro {
+    border-radius: 16px;
+    border: 1px solid rgba(201, 136, 58, 0.3) !important;
+    background: rgba(250, 246, 239, 0.97) !important;
+    backdrop-filter: blur(8px);
+    width: 100%;
+}
+
+.card-cadastro h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--bordo-principal);
+}
+
+/* ── Cadastro de Livro ──────────────────────────────── */
+.cadastro-livro-wrapper {
+    background: linear-gradient(rgba(250, 246, 239, 0.75), rgba(250, 246, 239, 0.75)),
+                url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=1500');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+.card-cadastro-livro {
+    border-radius: 18px;
+    border: 1px solid rgba(201, 136, 58, 0.25) !important;
+    background: rgba(250, 246, 239, 0.98) !important;
+    backdrop-filter: blur(5px);
+}
+
+/* ── Estante Pessoal ────────────────────────────────── */
+.estante-bg {
+    background-image: linear-gradient(rgba(250, 246, 239, 0.85), rgba(250, 246, 239, 0.92)),
+                      url('https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&q=80&w=2071');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+.xp-card {
+    background: linear-gradient(135deg, var(--bordo-escuro), var(--bordo-claro));
+    color: white;
+    border-radius: 18px;
+    padding: 28px 32px;
+    box-shadow: 0 10px 32px rgba(107, 26, 42, 0.35);
+    border: 1px solid rgba(201, 136, 58, 0.25);
+}
+
+.xp-card h2 {
+    font-family: 'Playfair Display', serif;
+}
+
+.xp-progresso {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    height: 10px;
+}
+
+.xp-progresso-bar {
+    background: linear-gradient(90deg, var(--ambar), var(--ambar-claro));
+    border-radius: 10px;
+    transition: width 1s ease;
+}
+
+.livro-titulo {
+    font-family: 'Playfair Display', serif;
+    color: var(--texto-escuro);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.btn-deletar {
+    font-family: 'Source Sans 3', sans-serif;
+    color: #dc3545;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.secao-titulo {
+    font-family: 'Playfair Display', serif;
+    color: var(--bordo-principal);
+}
+
+/* ── Ranking ────────────────────────────────────────── */
+.ranking-bg {
+    background-image: linear-gradient(rgba(250, 246, 239, 0.88), rgba(250, 246, 239, 0.65)),
+                      url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+.tabela-ranking {
+    background-color: rgba(250, 246, 239, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--bordo-principal);
+    border-radius: 14px;
+    box-shadow: 0 10px 32px rgba(107, 26, 42, 0.12);
+}
+
+/* Destaque visual para o campeão do ranking */
+.tabela-ranking tbody tr:first-child {
+    background-color: rgba(201, 136, 58, 0.08) !important;
+    border-left: 5px solid var(--ambar);
+}
+
+.tabela-ranking thead th {
+    font-family: 'Playfair Display', serif;
+    color: var(--bordo-escuro);
+    border-bottom: 2px solid rgba(107, 26, 42, 0.15);
+}
+
+.titulo-pagina {
+    font-family: 'Playfair Display', serif;
+    color: var(--bordo-principal);
+}
+
+/* ── Resenhas ───────────────────────────────────────── */
+.resenhas-wrapper {
+    background-color: var(--marfim);
+    min-height: 90vh;
+    padding: 50px 0;
+}
+
+.subtitulo-pagina {
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--ambar);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+}
+
+.card-resenha {
+    border: none;
+    border-left: 5px solid var(--bordo-principal);
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: white;
+}
+
+.card-resenha:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(107, 26, 42, 0.1) !important;
+}
+
+.caixa-resenha {
+    border-radius: 15px;
+    background-color: #fff;
+    border-left: 5px solid var(--ambar);
+}
+
+.nome-usuario-resenha {
+    color: var(--ambar);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.titulo-livro-resenha {
+    font-family: 'Playfair Display', serif;
+    color: var(--texto-escuro);
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+}
+
+.texto-resenha {
+    font-family: 'Source Sans 3', sans-serif;
+    font-style: italic;
+    color: #555;
+    line-height: 1.5;
+}
+
+.estrelas-resenha {
+    color: #f1c40f;
+    font-size: 0.8rem;
+}
+
+.data-postagem {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+/* ── Acervo Público ─────────────────────────────────── */
+.card-acervo {
+    border-radius: 12px;
+    background-color: var(--marfim);
+    border: none;
+}
+
+.card-acervo-img {
+    height: 250px;
+    object-fit: cover;
+}
+
+.card-acervo-indisponivel {
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    border: none;
+}
+
+.card-acervo-indisponivel .card-acervo-img {
+    filter: grayscale(40%);
+}
+
+.divisor-acervo {
+    border-top: 2px dashed var(--texto-escuro);
+    opacity: 0.2;
+}
+
+/* ══════════════════════════════════════════════════════
+   6. PAINEL ADMINISTRATIVO
+   ══════════════════════════════════════════════════════ */
+.admin-header {
+    background-color: var(--bordo-escuro);
+    color: var(--marfim);
+    padding: 30px 0;
+    border-bottom: 5px solid var(--ambar);
+    margin-bottom: 40px;
+}
+
+.admin-header h2 {
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+}
+
+.admin-nav .nav-link-admin-tab {
+    color: var(--texto-medio);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 8px 0;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s;
+}
+
+.admin-nav .nav-link-admin-tab:hover {
+    color: var(--ambar-claro);
+}
+
+.admin-nav .nav-link-admin-tab.ativo {
+    color: var(--bordo-principal);
+    border-bottom-color: var(--bordo-principal);
+}
+
+/* Cards de estatísticas do painel admin */
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 5px solid var(--ambar);
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card-success {
+    border-left-color: #198754;
+}
+
+.stat-card-danger {
+    border-left-color: #dc3545;
+}
+
+/* Tabela administrativa */
+.tabela-admin th {
+    background-color: var(--bordo-principal);
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+}
+
+.tabela-admin td {
+    vertical-align: middle;
+    font-family: 'Source Sans 3', sans-serif;
+}
+
+/* ══════════════════════════════════════════════════════
+   7. PÁGINA SOBRE
+   ══════════════════════════════════════════════════════ */
+.pagina-sobre {
+    background-color: var(--marfim);
+}
+
+.hero-sobre {
+    position: relative;
+    min-height: 440px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    background: linear-gradient(to bottom, rgba(74, 15, 28, 0.5), rgba(74, 15, 28, 0.88)),
+                url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=1500');
+    background-size: cover;
+    background-position: center 35%;
+}
+
+.hero-sobre .hero-texto {
+    padding: 48px 0 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-sobre h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: #fff;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+}
+
+.tag-fundacao {
+    display: inline-block;
+    background: rgba(201, 136, 58, 0.25);
+    border: 1px solid var(--ambar);
+    backdrop-filter: blur(6px);
+    color: var(--ambar-claro);
+    font-size: 0.8rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    padding: 5px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.texto-principal-sobre {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    line-height: 1.9;
+    color: var(--texto-escuro);
+    font-style: italic;
+    border-left: 4px solid var(--ambar);
+    padding-left: 24px;
+    margin-bottom: 32px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px 24px;
+    box-shadow: 0 2px 18px rgba(107, 26, 42, 0.08);
+    border-top: 4px solid var(--bordo-principal);
+    height: 100%;
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.info-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(107, 26, 42, 0.14);
+}
+
+.info-card h4 {
+    font-family: 'Playfair Display', serif;
+    color: var(--bordo-principal);
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.faixa-biblioteca {
+    background: linear-gradient(135deg, var(--bordo-escuro), var(--bordo-principal));
+    padding: 64px 0;
+    color: white;
+}
+
+.stat-numero {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ambar-claro);
+}
+
+.stat-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.9rem;
+    opacity: 0.75;
+}
+
+.passo {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 36px;
+}
+
+.passo-numero {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(107, 26, 42, 0.08);
+    border: 2px solid var(--bordo-principal);
+    color: var(--bordo-principal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+}
+
+.cta-final {
+    background: linear-gradient(135deg, rgba(107, 26, 42, 0.04), rgba(201, 136, 58, 0.08));
+    border-top: 1px solid rgba(107, 26, 42, 0.1);
+}
+
+/* ══════════════════════════════════════════════════════
+   8. ANIMAÇÕES
+   ══════════════════════════════════════════════════════ */
+.fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-up.visivel {
+    opacity: 1;
+    transform: translateY(0);
+}

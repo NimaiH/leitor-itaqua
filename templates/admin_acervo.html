@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Gestão de Acervo — Admin{% endblock %}
+
+{% block content %}
+
+<!-- ── Cabeçalho Admin ── -->
+<div class="admin-header shadow-sm mb-4">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h2>Gestão de Acervo Físico</h2>
+            <p class="mb-0 text-white-50">Controle de inventário e disponibilidade</p>
+        </div>
+        <button class="btn btn-biblioteca" data-bs-toggle="modal" data-bs-target="#modalAdicionar">
+            + Cadastrar Novo Livro no Acervo
+        </button>
+    </div>
+</div>
+
+<div class="container mb-5">
+
+    <!-- ── Navegação Admin ── -->
+    <nav class="admin-nav d-flex gap-4 mb-4 border-bottom">
+        <a href="{{ url_for('admin_pendentes') }}" class="nav-link-admin-tab py-2">Aprovação de XP</a>
+        <a href="{{ url_for('admin_acervo') }}" class="nav-link-admin-tab ativo py-2">Inventário Físico</a>
+    </nav>
+
+    <!-- ── Cards de Estatísticas ── -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-4">
+            <div class="stat-card shadow-sm">
+                <small class="text-muted text-uppercase fw-bold">Total no Acervo</small>
+                <h2 class="mb-0">{{ total }} Livros</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-card-success shadow-sm">
+                <small class="text-muted text-uppercase fw-bold">Disponíveis</small>
+                <h2 class="mb-0">{{ disponiveis }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-card-danger shadow-sm">
+                <small class="text-muted text-uppercase fw-bold">Emprestados</small>
+                <h2 class="mb-0">{{ emprestados }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Tabela do Acervo ── -->
+    <div class="card shadow-sm border-0 pb-5" style="border-radius: 12px; min-height: 250px;">
+        <div style="padding-bottom: 150px;">
+            <table class="table table-hover mb-0 text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Capa</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Patrimônio</th>
+                        <th>Págs</th>
+                        <th>Status Atual</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for livro in acervo %}
+                    <tr>
+                        <td>
+                            <img src="{{ livro['capa'] }}" alt="Capa" class="capa-miniatura-admin">
+                        </td>
+                        <td class="text-start fw-bold">{{ livro['titulo'] }}</td>
+                        <td>{{ livro['autor'] }}</td>
+                        <td><code class="text-dark">{{ livro['patrimonio'] or 'N/A' }}</code></td>
+                        <td>{{ livro['paginas'] }}</td>
+                        <td>
+                            <!-- Dropdown de status com data-bs-boundary="window" para evitar
+                                 o dropdown ser cortado pelo overflow da tabela -->
+                            <div class="dropdown">
+                                <button class="btn btn-sm dropdown-toggle
+                                    {% if livro['status'] == 'Disponível' %}btn-success
+                                    {% elif livro['status'] == 'Emprestado' %}btn-danger
+                                    {% else %}btn-secondary{% endif %}"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    data-bs-boundary="window">
+                                    {{ livro['status'] }}
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ url_for('status_acervo', livro_id=livro['id'], novo_status='Disponível') }}">Disponível</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('status_acervo', livro_id=livro['id'], novo_status='Emprestado') }}">Emprestado</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('status_acervo', livro_id=livro['id'], novo_status='Manutenção') }}">Manutenção</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('remover_acervo', livro_id=livro['id']) }}"
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('Remover do acervo permanentemente?')">🗑️</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- ── Modal: Adicionar Livro ao Acervo ── -->
+<div class="modal fade" id="modalAdicionar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ url_for('adicionar_acervo') }}" method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Livro no Acervo Físico</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">CAPA DO LIVRO</label>
+                        <input type="file" name="capa_imagem" class="form-control" accept="image/*">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Título do Livro</label>
+                        <input type="text" name="titulo" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Autor</label>
+                        <input type="text" name="autor" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Total de Páginas</label>
+                            <input type="number" name="paginas" class="form-control" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Cód. Patrimônio</label>
+                            <input type="text" name="patrimonio" class="form-control" placeholder="C0001">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar no Sistema</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

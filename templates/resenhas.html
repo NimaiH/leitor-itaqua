@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Resenhas — Leitor de Itaquá{% endblock %}
+
+{% block content %}
+<div class="resenhas-wrapper">
+    <div class="container">
+
+        <!-- ── Cabeçalho ── -->
+        <div class="text-center">
+            <h1 class="titulo-pagina" style="font-size: 2.5rem; margin-bottom: 10px;">Mural de Resenhas</h1>
+            <p class="subtitulo-pagina">A voz da comunidade literária de Itaquá</p>
+        </div>
+
+        <!-- ── Botão para abrir o formulário ── -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-8 text-center">
+                <button class="btn btn-bosque fw-bold px-4 py-2 shadow-sm"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#caixaNovaResenha">
+                    ✍️ Compartilhe sua leitura
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Formulário de Nova Resenha (colapsável) ── -->
+        <div class="row justify-content-center mb-5 collapse" id="caixaNovaResenha">
+            <div class="col-md-8">
+                <div class="card shadow-sm p-4 caixa-resenha">
+                    <h4 class="mb-3 titulo-pagina">Escreva sua Resenha</h4>
+
+                    <form action="{{ url_for('salvar_resenha') }}" method="POST">
+                        <input type="hidden" name="livro_id" id="input_livro_id" required>
+
+                        <!-- Seletor visual de livro via modal -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">Qual livro você quer comentar?</label>
+                            <div id="seletor_livro_visual"
+                                 class="p-3 border rounded d-flex align-items-center justify-content-between"
+                                 style="cursor: pointer; background: #faf6ef; transition: 0.3s;"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#modalSelecaoLivro">
+                                <div class="d-flex align-items-center" id="preview_selecionado">
+                                    <div class="bg-light d-flex align-items-center justify-content-center rounded me-3"
+                                         style="width: 50px; height: 70px; border: 1px dashed #ccc;">
+                                        <span class="text-muted">📖</span>
+                                    </div>
+                                    <div><span class="text-muted">Clique para escolher um livro da sua estante...</span></div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Escolher Livro</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Sua opinião</label>
+                            <textarea name="texto" class="form-control" rows="3"
+                                      placeholder="O que você achou dessa história?" required></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Nota (1 a 5)</label>
+                                <input type="number" name="nota" class="form-control" min="1" max="5" value="5" required>
+                            </div>
+                            <div class="col-md-8 d-flex align-items-end mb-3">
+                                <button type="submit" class="btn btn-bosque w-100">Publicar Resenha</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <hr class="mb-5" style="opacity: 0.1;">
+
+        <!-- ── Feed de Resenhas ── -->
+        <div class="row g-4">
+            {% for resenha in resenhas %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-resenha shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+
+                        <div class="d-flex gap-3 mb-3">
+                            <img src="{{ resenha['capa']|replace('\\', '/') if resenha['capa'] else 'https://via.placeholder.com/60x90?text=Sem+Capa' }}"
+                                 class="capa-miniatura" alt="Capa">
+                            <div>
+                                <div class="nome-usuario-resenha">{{ resenha['nome_usuario'] }}</div>
+                                <h3 class="titulo-livro-resenha">{{ resenha['titulo_livro'] }}</h3>
+                                <div class="estrelas-resenha mb-2">
+                                    {% for i in range(resenha['nota'] | int) %}⭐{% endfor %}
+                                    <span class="text-muted small ms-1 fw-bold">({{ resenha['nota'] }}/5)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="texto-resenha flex-grow-1">"{{ resenha['texto'] }}"</p>
+
+                        <div class="data-postagem mt-3 border-top pt-2 d-flex justify-content-between align-items-center">
+                            <span>Lido em: {{ resenha['data_postagem'][:10] if resenha['data_postagem'] else 'Recente' }}</span>
+
+                            {% if session.get('usuario_id') and resenha['usuario_id'] == session.get('usuario_id') %}
+                            <a href="{{ url_for('deletar_resenha', resenha_id=resenha['id']) }}"
+                               class="btn btn-sm btn-outline-danger py-0 px-2"
+                               onclick="return confirm('Deseja mesmo apagar esta resenha?')">
+                                🗑️ Apagar
+                            </a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Ainda não há resenhas. Seja o primeiro a partilhar a sua jornada!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+<!-- ── Modal: Seleção de Livro ── -->
+<div class="modal fade" id="modalSelecaoLivro" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px;">
+            <div class="modal-header border-0">
+                <h5 class="modal-title titulo-pagina">A Sua Estante</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body bg-light">
+                <div class="row g-3">
+                    {% if meus_livros %}
+                        {% for livro in meus_livros %}
+                        <div class="col-4 col-md-3">
+                            <div class="card h-100 shadow-sm"
+                                 style="cursor: pointer; transition: 0.2s;"
+                                 onclick="selecionarLivro('{{ livro['id'] }}', '{{ livro['titulo'] }}', '{{ (livro['capa'] or '')|replace('\\', '/') }}')">
+                                <img src="{{ (livro['capa'] or 'https://via.placeholder.com/150x200?text=Sem+Capa')|replace('\\', '/') }}"
+                                     class="card-img-top" style="height: 150px; object-fit: cover;">
+                                <div class="card-body p-2 text-center">
+                                    <small class="fw-bold d-block text-truncate" style="font-size: 0.8rem;">{{ livro['titulo'] }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center p-4 w-100">
+                            <p>Ainda não tem livros na sua estante para resenhar.</p>
+                            <a href="{{ url_for('cadastrar_livros') }}" class="btn btn-sm btn-bosque">Adicionar um Livro</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/**
+ * Seleciona um livro no modal e atualiza o preview do formulário.
+ * Após a seleção, fecha o modal automaticamente para melhor UX.
+ */
+function selecionarLivro(id, titulo, capa) {
+    document.getElementById('input_livro_id').value = id;
+
+    const capaHtml = capa
+        ? `<img src="${capa}" class="rounded me-3 shadow-sm" style="width:50px;height:70px;object-fit:cover;border:1px solid var(--bordo-principal);">`
+        : `<div class="bg-light d-flex align-items-center justify-content-center rounded me-3" style="width:50px;height:70px;"><span>📖</span></div>`;
+
+    document.getElementById('preview_selecionado').innerHTML = `
+        ${capaHtml}
+        <div>
+            <strong class="d-block" style="color: var(--bordo-principal);">${titulo}</strong>
+            <small class="text-success fw-bold">✔ Selecionado</small>
+        </div>
+    `;
+
+    const modalEl = document.getElementById('modalSelecaoLivro');
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modal.hide();
+}
+</script>
+{% endblock %}

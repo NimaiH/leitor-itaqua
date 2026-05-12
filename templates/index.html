@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Leitor de Itaquá — Projeto Integrador UNIVESP{% endblock %}
+
+{% block content %}
+<div class="landing-wrapper">
+
+    <!-- ── Hero ── -->
+    <header class="hero-section text-center">
+        <div class="container fade-up">
+            <h1 class="display-3 fw-bold mb-3">Leitor de Itaquá</h1>
+            <p class="lead mb-4 fs-4">Gamificando a leitura na Biblioteca Municipal Prof. Aroldo de Azevedo.</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="{{ url_for('cadastro') }}" class="btn btn-ambar btn-lg px-5 py-3 fw-bold">Começar Minha Jornada</a>
+                <a href="#sobre-o-pi" class="btn btn-outline-light btn-lg px-4">Conhecer o Projeto</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── Pilares do Projeto ── -->
+    <section class="py-5 bg-white">
+        <div class="container py-5">
+            <div class="row g-4 text-center">
+                <div class="col-md-4 fade-up">
+                    <div class="p-4 border-0 card h-100 bg-light">
+                        <span class="display-5 mb-3">🎮</span>
+                        <h4 class="titulo-pagina">Gamificação</h4>
+                        <p class="text-muted">Transforme cada página lida em XP. Suba de nível e conquiste medalhas conforme avança nas suas leituras.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 fade-up">
+                    <div class="p-4 border-0 card h-100 bg-light">
+                        <span class="display-5 mb-3">🔍</span>
+                        <h4 class="titulo-pagina">Busca Inteligente</h4>
+                        <p class="text-muted">Conexão direta com a API do Google Books para buscar capas e dados técnicos de forma automática.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 fade-up">
+                    <div class="p-4 border-0 card h-100 bg-light">
+                        <span class="display-5 mb-3">🏆</span>
+                        <h4 class="titulo-pagina">Comunidade</h4>
+                        <p class="text-muted">Acompanhe o ranking dos maiores leitores de Itaquaquecetuba e inspire outros a lerem mais.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Sobre o Projeto ── -->
+    <section id="sobre-o-pi" class="py-5 bg-marfim">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0 fade-up">
+                    <h2 class="mb-4 titulo-pagina">Nossa Trajetória: Do Bosque ao Município</h2>
+                    <p class="text-dark lead">Este projeto nasceu da disciplina de <strong>Projeto Integrador da UNIVESP</strong>.</p>
+                    <p class="text-muted">Iniciamos como o <em>"Leitor do Bosque"</em>, focado em uma comunidade específica. Durante o desenvolvimento, percebemos o potencial de escala e adaptamos toda a infraestrutura para atender a <strong>Biblioteca Municipal Prof. Aroldo de Azevedo</strong>.</p>
+                    <div class="alert border-start border-4 border-warning bg-white shadow-sm">
+                        <small class="fw-bold text-uppercase" style="color: var(--ambar);">Tecnologias Utilizadas:</small><br>
+                        Python (Flask), SQLite, Bootstrap 5 e Integração com API REST.
+                    </div>
+                </div>
+                <div class="col-lg-6 ps-lg-5 fade-up">
+                    <div class="p-5 rounded-4 shadow-lg text-white" style="background: var(--bordo-principal);">
+                        <h3 class="mb-3">O Salão dos Leitores</h3>
+                        <p>O ranking é o coração do nosso projeto social. Não é apenas uma lista — é a prova do impacto cultural em nossa cidade.</p>
+                        <hr class="opacity-25">
+                        <a href="{{ url_for('ranking') }}" class="text-white text-decoration-none fw-bold">Ver ranking completo →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Observador de interseção para ativar a animação fade-up conforme o
+    // usuário rola a página. Melhora a experiência sem impactar performance.
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visivel');
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+{% endblock %}

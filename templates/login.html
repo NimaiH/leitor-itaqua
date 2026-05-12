@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar — Leitor de Itaquá{% endblock %}
+
+{% block content %}
+<div class="login-page-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5 col-xl-4 fade-up visivel">
+                <div class="card border-0 shadow-lg login-card">
+                    <div class="card-body p-5">
+
+                        <div class="text-center mb-4">
+                            <span class="display-1" style="color: var(--ambar);">📖</span>
+                            <h2 class="fw-bold mt-2 titulo-pagina">Leitor de Itaquá</h2>
+                            <p class="text-muted">Inicie sua jornada literária municipal.</p>
+                        </div>
+
+                        {% if erro %}
+                        <div class="alert border-0 shadow-sm small text-center" role="alert"
+                             style="background-color: #fceaea; color: #a94442;">
+                            {{ erro }}
+                        </div>
+                        {% endif %}
+
+                        <form method="POST" action="{{ url_for('login') }}">
+                            <div class="mb-4">
+                                <label for="email" class="form-label text-uppercase">Email institucional</label>
+                                <input type="email" class="form-control form-control-lg bg-light border-0"
+                                       id="email" name="email" placeholder="nome@email.com" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="senha" class="form-label text-uppercase">Sua Senha</label>
+                                <input type="password" class="form-control form-control-lg bg-light border-0"
+                                       id="senha" name="senha" placeholder="••••••••" required>
+                            </div>
+                            <div class="d-grid gap-2 mb-4">
+                                <button type="submit" class="btn btn-bordo btn-lg fw-bold shadow-sm">
+                                    Entrar no Salão
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <p class="text-muted small mb-0">
+                                Ainda não tem conta?
+                                <a href="{{ url_for('cadastro') }}" class="fw-bold text-decoration-none" style="color: var(--ambar);">Cadastre-se aqui.</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

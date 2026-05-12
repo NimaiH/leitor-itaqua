@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Administrativo — Leitor de Itaquá{% endblock %}
+
+{% block content %}
+
+<!-- ── Cabeçalho Admin ── -->
+<div class="admin-header shadow-sm">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h2>Painel de Controle Admin</h2>
+            <p class="mb-0 text-white-50">Gestão de XP e Auditoria de Acervo</p>
+        </div>
+        <span class="badge bg-light text-dark fs-6 p-2 shadow-sm">🛡️ Acesso Restrito</span>
+    </div>
+</div>
+
+<div class="container mb-5" style="min-height: 60vh;">
+
+    <!-- ── Navegação Admin ── -->
+    <nav class="admin-nav d-flex gap-4 mb-4 border-bottom">
+        <a href="{{ url_for('admin_pendentes') }}"
+           class="nav-link-admin-tab ativo py-2">Aprovação de XP</a>
+        <a href="{{ url_for('admin_acervo') }}"
+           class="nav-link-admin-tab py-2">Inventário Físico</a>
+    </nav>
+
+    <!-- ── Tabela de Pendentes ── -->
+    <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+        <div class="card-body p-0">
+            {% if pendentes %}
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 tabela-admin text-center">
+                    <thead>
+                        <tr>
+                            <th>Capa</th>
+                            <th class="text-start">Livro Cadastrado</th>
+                            <th>Páginas (XP)</th>
+                            <th class="text-start">Leitor (E-mail)</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for livro in pendentes %}
+                        <tr>
+                            <td>
+                                <img src="{{ livro['capa']|replace('\\', '/') if livro['capa'] else 'https://via.placeholder.com/40x60?text=Sem+Capa' }}"
+                                     class="capa-miniatura-admin" alt="Capa">
+                            </td>
+                            <td class="text-start fw-bold" style="color: var(--bordo-escuro);">{{ livro['titulo'] }}</td>
+                            <td><span class="badge badge-xp px-3 py-2 fs-6">+{{ livro['paginas'] }} XP</span></td>
+                            <td class="text-start">
+                                <div class="fw-bold">{{ livro['nome'] }}</div>
+                                <small class="text-muted">{{ livro['email'] }}</small>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ url_for('aprovar_livro', livro_id=livro['id']) }}"
+                                       class="btn btn-sm btn-success fw-bold px-3 shadow-sm"
+                                       onclick="return confirm('Confirmar as páginas e liberar o XP para este usuário?')">
+                                        ✔ Aprovar
+                                    </a>
+                                    <a href="{{ url_for('rejeitar_livro', livro_id=livro['id']) }}"
+                                       class="btn btn-sm btn-outline-danger fw-bold shadow-sm"
+                                       onclick="return confirm('Tem certeza? O livro será rejeitado e o usuário não ganhará XP.')">
+                                        ✖ Rejeitar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% else %}
+            <div class="text-center py-5">
+                <h4 class="titulo-pagina">Tudo limpo por aqui!</h4>
+                <p class="text-muted">Não há livros pendentes de aprovação no momento.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

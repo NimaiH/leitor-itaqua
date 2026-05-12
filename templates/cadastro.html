@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Criar Conta — Leitor de Itaquá{% endblock %}
+
+{% block content %}
+<div class="cadastro-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-5">
+                <div class="card card-cadastro shadow-lg">
+                    <div class="card-body p-5">
+
+                        <div class="text-center mb-5">
+                            <span style="font-size: 2.5rem;">📚</span>
+                            <div class="divisor-logo mt-2"></div>
+                            <h2 class="fw-bold mb-1">Leitor de Itaquá</h2>
+                            <p class="text-muted" style="font-size: 0.95rem;">
+                                Crie sua conta e comece sua jornada literária na Biblioteca Prof. Aroldo de Azevedo
+                            </p>
+                        </div>
+
+                        {% if erro %}
+                        <div class="alert border-0 shadow-sm" role="alert"
+                             style="background: rgba(107, 26, 42, 0.08); color: var(--bordo-principal);">
+                            {{ erro }}
+                        </div>
+                        {% endif %}
+
+                        <form action="{{ url_for('salvar_usuario') }}" method="POST">
+                            <div class="mb-4">
+                                <label for="nome" class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" id="nome" name="nome"
+                                       placeholder="Como quer ser chamado?" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                       placeholder="seu@email.com" required>
+                            </div>
+                            <div class="mb-5">
+                                <label for="senha" class="form-label">Senha</label>
+                                <input type="password" class="form-control" id="senha" name="senha"
+                                       placeholder="Crie uma senha forte" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-bosque btn-lg py-3 fw-bold">
+                                    Cadastrar e Iniciar Jornada
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <p class="text-muted" style="font-size: 0.9rem;">
+                                Já faz parte da comunidade?
+                                <a href="{{ url_for('login') }}" class="fw-bold text-decoration-none" style="color: var(--bordo-principal);">Faça login</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

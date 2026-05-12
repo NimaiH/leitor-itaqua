@@ -1,0 +1,17 @@
+# Ambiente Virtual (ignora a pasta inteira)
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Banco de Dados (Para não subir dados de teste)
+*.db
+*.sqlite3
+
+# Configurações sensíveis (Sua Secret Key)
+.env
+
+# Configurações do Editor
+.vscode/

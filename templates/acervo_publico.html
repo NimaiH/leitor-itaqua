@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Acervo Disponível — Leitor de Itaquá{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- ── Livros Disponíveis ── -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold titulo-pagina">Acervo Disponível</h1>
+        <p class="lead text-muted">Confira as obras que estão esperando por você na Biblioteca de Itaquaquecetuba.</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        {% if livros_disponiveis %}
+            {% for livro in livros_disponiveis %}
+            <div class="col">
+                <div class="card card-acervo h-100 shadow-sm">
+                    <img src="{{ livro['capa'] if livro['capa'] else 'https://via.placeholder.com/150x200?text=Sem+Capa' }}"
+                         class="card-img-top card-acervo-img"
+                         alt="Capa de {{ livro['titulo'] }}">
+                    <div class="card-body d-flex flex-column text-center">
+                        <h5 class="card-title fw-bold mb-1 titulo-pagina">{{ livro['titulo'] }}</h5>
+                        <p class="card-text text-muted small mb-3">{{ livro['autor'] }}</p>
+                        <div class="mt-auto">
+                            <span class="badge bg-success rounded-pill px-3 py-2">Disponível na Biblioteca</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <h4 class="text-muted">Nenhum livro disponível no momento.</h4>
+            </div>
+        {% endif %}
+    </div>
+
+    <hr class="my-5 divisor-acervo">
+
+    <!-- ── Livros Indisponíveis ── -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold titulo-pagina">Em Circulação / Manutenção</h2>
+        <p class="text-muted">Estas obras fazem parte do acervo, mas não estão na estante neste momento.</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        {% if livros_indisponiveis %}
+            {% for livro in livros_indisponiveis %}
+            <div class="col">
+                <div class="card card-acervo-indisponivel h-100 shadow-sm opacity-75">
+                    <img src="{{ livro['capa'] if livro['capa'] else 'https://via.placeholder.com/150x200?text=Sem+Capa' }}"
+                         class="card-img-top card-acervo-img"
+                         alt="Capa de {{ livro['titulo'] }}">
+                    <div class="card-body d-flex flex-column text-center">
+                        <h5 class="card-title fw-bold mb-1 text-muted">{{ livro['titulo'] }}</h5>
+                        <p class="card-text text-muted small mb-3">{{ livro['autor'] }}</p>
+                        <div class="mt-auto">
+                            <span class="badge rounded-pill px-3 py-2
+                                {% if livro['status'] == 'Emprestado' %}bg-danger
+                                {% elif livro['status'] == 'Manutenção' %}bg-secondary
+                                {% else %}bg-dark{% endif %}">
+                                {{ livro['status'] }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center py-4">
+                <p class="text-muted">Todos os livros do acervo estão disponíveis na biblioteca neste momento!</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

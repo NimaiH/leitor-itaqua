@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Ranking — Leitor de Itaquá{% endblock %}
+
+{% block content %}
+<div class="ranking-bg" style="min-height: 100%;">
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold titulo-pagina">🏆 Ranking de Itaquaquecetuba</h2>
+        <p class="text-muted">Veja quem são os maiores leitores da Biblioteca Prof. Aroldo de Azevedo</p>
+    </div>
+
+    <div class="table-responsive tabela-ranking p-3">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col" class="ps-3">Posição</th>
+                    <th scope="col">Leitor</th>
+                    <th scope="col">Título de Rank</th>
+                    <th scope="col" class="text-center">Livros</th>
+                    <th scope="col" class="text-end pe-3">XP Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leitor in ranking %}
+                    {% set xp_final = leitor['xp'] if leitor['xp'] else 0 %}
+                    {% set nivel = (xp_final // divisor) + 1 %}
+
+                    {# Títulos dinâmicos adaptados ao contexto de biblioteca #}
+                    {% if nivel <= 3 %}   {% set t, i = "Leitor Iniciante",   "📖" %}
+                    {% elif nivel <= 9 %} {% set t, i = "Leitor Assíduo",     "📚" %}
+                    {% elif nivel <= 19 %}{% set t, i = "Guardião do Acervo", "🏛️" %}
+                    {% elif nivel <= 39 %}{% set t, i = "Sábio das Letras",   "🦉" %}
+                    {% else %}            {% set t, i = "Mestre das Letras",  "✨" %}
+                    {% endif %}
+
+                <tr>
+                    <th scope="row" class="ps-3 titulo-pagina">{{ loop.index }}º</th>
+                    <td class="fw-bold">{{ leitor['nome'] }}</td>
+                    <td>
+                        <span class="badge rounded-pill p-2 badge-rank">
+                            {{ i }} {{ t }} <small class="opacity-75">(Nível {{ nivel }})</small>
+                        </span>
+                    </td>
+                    <td class="text-center">{{ leitor['total_livros'] }}</td>
+                    <td class="text-end fw-bold pe-3 titulo-pagina">{{ xp_final }} XP</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</div>
+{% endblock %}
